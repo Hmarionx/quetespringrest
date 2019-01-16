@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class BookController {
+class BookController {
     @Autowired
     BookRepository bookRepository;
 
@@ -47,8 +47,7 @@ public class BookController {
         book.setAuthor(bookUpdate.getAuthor());
         book.setDescription(bookUpdate.getDescription());
 
-        Book updatedBook = bookRepository.save(book);
-        return updatedBook;
+        return bookRepository.save(book);
     }
 
     // Delete a Book
@@ -60,5 +59,12 @@ public class BookController {
         bookRepository.delete(book);
 
         return ResponseEntity.ok().build();
+    }
+
+    //Search a book
+    @PostMapping("/search/{keyword}")
+    public List<Book> getBookContains(@PathVariable(value = "keyword") String keyword) {
+
+        return bookRepository.findByTitleOrDescriptionContaining(keyword);
     }
 }
